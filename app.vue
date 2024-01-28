@@ -36,15 +36,15 @@ const submitForm = async () => {
     });
 
     // Tambahkan kode lain yang ingin Anda eksekusi setelah berhasil dikirim
-    console.log('Data berhasil dikirim ke Google Spreadsheets');
+    alert('Data berhasil dikirim ke Google Spreadsheets');
 
     // Bersihkan formulir setelah pengiriman berhasil
     email = '';
     message = '';
   } catch (error) {
-    console.error('Gagal mengirim data:', error);
+    alert('Gagal mengirim data:', error);
     axios.get(url).then((response) => {
-      console.log(response.data);
+      alert(response.data);
     });
     // Tambahkan penanganan kesalahan sesuai kebutuhan Anda
   }
