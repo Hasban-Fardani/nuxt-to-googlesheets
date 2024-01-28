@@ -16,16 +16,23 @@
 import axios from 'axios';
 import Tabletop from 'tabletop';
 
-const url = "https://script.google.com/macros/s/AKfycbyO4aBhiusVGOK_1wdfmgjKIP9mUZjJlP5XggP0CmAzfsHCZOyXKpKoY5J33BMxATRh/exec";
+const url = "https://script.google.com/macros/s/AKfycbyCSUjXOfXCcuzh8vmg7yzfEn_HJXCpMBdkRgNCf3V-SXAXof60byWIi2Spamst63dV/exec";
 let email = ref('');
 let message = ref('');
 
 const submitForm = async () => {
   try {
+    let data = JSON.stringify({
+      email: email.value,
+      message: message.value,
+    });
+
     // Kirim data ke Google Spreadsheets menggunakan axios
-    await axios.post(url, {
-      email: email,
-      message: message,
+    await axios.post(url, data,
+    {
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8',
+      },
     });
 
     // Tambahkan kode lain yang ingin Anda eksekusi setelah berhasil dikirim
@@ -36,6 +43,9 @@ const submitForm = async () => {
     message = '';
   } catch (error) {
     console.error('Gagal mengirim data:', error);
+    axios.get(url).then((response) => {
+      console.log(response.data);
+    });
     // Tambahkan penanganan kesalahan sesuai kebutuhan Anda
   }
 }
