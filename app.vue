@@ -1,26 +1,29 @@
 <template>
-  <div>
-    <form @submit.prevent="submitForm">
+  <div class="card" :class="{ 'centering': onSubmit }">
+    <form v-if="!onSubmit" @submit.prevent="submitForm">
       <label for="email">Email:</label>
       <input type="email" id="email" v-model="email" required>
 
       <label for="message">Pesan:</label>
       <textarea id="message" v-model="message" required></textarea>
-
       <button type="submit">Kirim</button>
     </form>
+    
+    <img v-else src="/loading.gif" alt="loading" width="100">
   </div>
 </template>
 
 <script setup>
 import axios from 'axios';
-import Tabletop from 'tabletop';
+import Swal from 'sweetalert2';
 
 const url = "https://script.google.com/macros/s/AKfycbyCSUjXOfXCcuzh8vmg7yzfEn_HJXCpMBdkRgNCf3V-SXAXof60byWIi2Spamst63dV/exec";
+let onSubmit = ref(false);
 let email = ref('');
 let message = ref('');
 
 const submitForm = async () => {
+  onSubmit.value = true
   try {
     let data = JSON.stringify({
       email: email.value,
@@ -35,19 +38,21 @@ const submitForm = async () => {
       },
     });
 
-    // Tambahkan kode lain yang ingin Anda eksekusi setelah berhasil dikirim
-    alert('Data berhasil dikirim ke Google Spreadsheets');
-
-    // Bersihkan formulir setelah pengiriman berhasil
-    email = '';
-    message = '';
-  } catch (error) {
-    alert('Gagal mengirim data:', error);
-    axios.get(url).then((response) => {
-      alert(response.data);
+    Swal.fire({
+      icon: 'info',
+      title: 'Berhasil Mengirim Data Ke Google Spreadsheet',
+      timer: 1000,
     });
-    // Tambahkan penanganan kesalahan sesuai kebutuhan Anda
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Gagal Mengirim Data Ke Google Spreadsheet',
+      timer: 1000,
+    });
   }
+  onSubmit.value = false
+  email.value = '';
+  message.value = '';
 }
 </script>
 
@@ -68,13 +73,20 @@ const submitForm = async () => {
     width: 100vw;
   }
 
-  form {
+  .card {
     max-width: 400px;
     width: 100%;
+    height: 220px;
     padding: 20px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .centering {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   label {
