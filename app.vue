@@ -1,0 +1,104 @@
+<template>
+  <div>
+    <form @submit.prevent="submitForm">
+      <label for="email">Email:</label>
+      <input type="email" id="email" v-model="email" required>
+
+      <label for="message">Pesan:</label>
+      <textarea id="message" v-model="message" required></textarea>
+
+      <button type="submit">Kirim</button>
+    </form>
+  </div>
+</template>
+
+<script setup>
+import axios from 'axios';
+import Tabletop from 'tabletop';
+
+const url = "https://script.google.com/macros/s/AKfycbyO4aBhiusVGOK_1wdfmgjKIP9mUZjJlP5XggP0CmAzfsHCZOyXKpKoY5J33BMxATRh/exec";
+let email = ref('');
+let message = ref('');
+
+const submitForm = async () => {
+  try {
+    // Kirim data ke Google Spreadsheets menggunakan axios
+    await axios.post(url, {
+      email: email,
+      message: message,
+    });
+
+    // Tambahkan kode lain yang ingin Anda eksekusi setelah berhasil dikirim
+    console.log('Data berhasil dikirim ke Google Spreadsheets');
+
+    // Bersihkan formulir setelah pengiriman berhasil
+    email = '';
+    message = '';
+  } catch (error) {
+    console.error('Gagal mengirim data:', error);
+    // Tambahkan penanganan kesalahan sesuai kebutuhan Anda
+  }
+}
+</script>
+
+<style>
+ * {
+  margin: 0;
+  padding: 0;
+ }
+
+  #__nuxt {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  form {
+    max-width: 400px;
+    width: 100%;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #333;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  button:hover {
+    background-color: #45a049;
+  }
+</style>
